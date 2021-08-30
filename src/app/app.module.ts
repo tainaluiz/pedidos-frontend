@@ -1,6 +1,3 @@
-import { ClienteService } from './../services/domain/cliente.service';
-import { StorageService } from './../services/storage.service';
-import { AuthService } from './../services/auth.service';
 import { ErrorHandler, NgModule } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserModule } from '@angular/platform-browser';
@@ -9,8 +6,11 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
 
 import { MyApp } from './app.component';
-
+import { ClienteService } from './../services/domain/cliente.service';
+import { StorageService } from './../services/storage.service';
+import { AuthService } from './../services/auth.service';
 import { CategoriaService } from './../services/domain/categoria.service';
+import { AuthInterceptorProvider } from './../interceptors/auth-interceptor';
 import { ErrorInterceptorProvider } from '../interceptors/error-interceptor';
 
 
@@ -32,6 +32,7 @@ import { ErrorInterceptorProvider } from '../interceptors/error-interceptor';
     SplashScreen,
     { provide: ErrorHandler, useClass: IonicErrorHandler },
     CategoriaService,
+    AuthInterceptorProvider,
     ErrorInterceptorProvider,
     AuthService,
     StorageService,
