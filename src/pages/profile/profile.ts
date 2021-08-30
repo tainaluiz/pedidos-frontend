@@ -27,8 +27,19 @@ export class ProfilePage {
         .subscribe(response => {
           this.cliente = response;
           this.getImageIfExists();
-        }, () => { });
+        },
+          error => {
+            if (error.status == 403) {
+              this.redirectToHome();
+            }
+          });
+    } else {
+      this.redirectToHome();
     }
+  }
+
+  redirectToHome() {
+    this.navCtrl.setRoot('HomePage');
   }
 
   getImageIfExists() {
