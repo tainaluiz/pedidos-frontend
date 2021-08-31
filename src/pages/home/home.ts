@@ -1,3 +1,4 @@
+import { StorageService } from './../../services/storage.service';
 import { AuthService } from './../../services/auth.service';
 import { CredenciaisDTO } from './../../models/credenciais.dto';
 import { Component } from '@angular/core';
@@ -18,7 +19,8 @@ export class HomePage {
   constructor(
     public navCtrl: NavController,
     public menu: MenuController,
-    public authService: AuthService) {
+    public authService: AuthService,
+    public storageService: StorageService) {
   }
 
   ionViewWillEnter() {
@@ -26,11 +28,14 @@ export class HomePage {
   }
 
   ionViewDidEnter() {
-    this.authService.refreshToken()
-      .subscribe(response => {
-        this.authService.successfulLogin(response.headers.get('Authorization'));
-        this.navCtrl.setRoot('CategoriasPage');
-      }, () => { })
+    const localUser = this.storageService.getLocalUser();
+    if (localUser) {
+      this.authService.refreshToken()
+        .subscribe(response => {
+          this.authService.successfulLogin(response.headers.get('Authorization'));
+          this.navCtrl.setRoot('CategoriasPage');
+        }, () => { })
+    }
   }
 
   ionViewDidLeave() {
