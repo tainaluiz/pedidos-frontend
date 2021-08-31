@@ -38,7 +38,7 @@ export class HomePage {
     }
   }
 
-  ionViewDidLeave() {
+  ionViewWillLeave() {
     this.menu.swipeEnable(true);
   }
 
