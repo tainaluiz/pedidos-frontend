@@ -1,3 +1,4 @@
+import { ClienteDTO } from './../../models/cliente.dto';
 import { Injectable } from "@angular/core";
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs/Rx';
@@ -21,5 +22,16 @@ export class ClienteService {
 
     getFormattedUrlImageFromBucket(id: string) {
         return `${API_CONFIG.bucketBaseUrl}/cp${id}.jpg`;
+    }
+
+    insert(obj: ClienteDTO) {
+        return this.http.post(
+            `${API_CONFIG.baseUrl}/clientes`,
+            obj,
+            {
+                observe: 'response',
+                responseType: 'text'
+            }
+        )
     }
 }
