@@ -10,6 +10,7 @@ import { ClienteService } from './../services/domain/cliente.service';
 import { StorageService } from './../services/storage.service';
 import { AuthService } from './../services/auth.service';
 import { CategoriaService } from './../services/domain/categoria.service';
+import { ProdutoService } from './../services/domain/produto.service';
 import { AuthInterceptorProvider } from './../interceptors/auth-interceptor';
 import { ErrorInterceptorProvider } from '../interceptors/error-interceptor';
 
@@ -37,6 +38,7 @@ import { ErrorInterceptorProvider } from '../interceptors/error-interceptor';
     AuthService,
     StorageService,
     ClienteService,
+    ProdutoService,
   ]
 })
 export class AppModule { }
