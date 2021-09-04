@@ -1,4 +1,3 @@
-import { CartService } from './../services/domain/cart.service';
 import { ErrorHandler, NgModule } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserModule } from '@angular/platform-browser';
@@ -14,6 +13,7 @@ import { CategoriaService } from './../services/domain/categoria.service';
 import { ProdutoService } from './../services/domain/produto.service';
 import { AuthInterceptorProvider } from './../interceptors/auth-interceptor';
 import { ErrorInterceptorProvider } from '../interceptors/error-interceptor';
+import { CartService } from './../services/domain/cart.service';
 
 @NgModule({
   declarations: [
