@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
-import { EnderecoDTO } from './../../models/endereco.dts';
-import { CartService } from './../../services/domain/cart.service';
 import { PedidoDTO } from './../../models/pedido.dto';
-import { ClienteService } from '../../services/domain/cliente.service';
+import { EnderecoDTO } from '../../models/endereco.dto';
 import { StorageService } from '../../services/storage.service';
+import { CartService } from './../../services/domain/cart.service';
+import { ClienteService } from '../../services/domain/cliente.service';
 
 @IonicPage()
 @Component({

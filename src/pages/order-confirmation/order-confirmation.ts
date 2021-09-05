@@ -1,11 +1,12 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
-import { ClienteService } from './../../services/domain/cliente.service';
-import { EnderecoDTO } from './../../models/endereco.dts';
-import { ClienteDTO } from './../../models/cliente.dto';
-import { CartService } from './../../services/domain/cart.service';
-import { PedidoDTO } from './../../models/pedido.dto';
 import { CartItem } from '../../models/cart-item';
+import { PedidoDTO } from './../../models/pedido.dto';
+import { ClienteDTO } from './../../models/cliente.dto';
+import { EnderecoDTO } from '../../models/endereco.dto';
+import { CartService } from './../../services/domain/cart.service';
+import { PedidoService } from './../../services/domain/pedido.service';
+import { ClienteService } from './../../services/domain/cliente.service';
 
 @IonicPage()
 @Component({
@@ -18,12 +19,14 @@ export class OrderConfirmationPage {
   cartItems: CartItem[];
   cliente: ClienteDTO;
   endereco: EnderecoDTO;
+  codPedido: string;
 
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
     public cartService: CartService,
-    public clienteService: ClienteService) {
+    public clienteService: ClienteService,
+    public pedidoService: PedidoService) {
     this.pedido = this.navParams.get('pedido');
   }
 
@@ -43,6 +46,31 @@ export class OrderConfirmationPage {
 
   total() {
     return this.cartService.total();
+  }
+
+  checkout() {
+    this.pedidoService.insert(this.pedido)
+      .subscribe(response => {
+        this.cartService.createOrClearCart();
+        this.codPedido = this.getIdPedido(response.headers.get('location'));
+      }, (error) => {
+        if (error.status == 403) {
+          this.navCtrl.setRoot('HomePage');
+        }
+      })
+  }
+
+  back() {
+    this.navCtrl.setRoot('CartPage');
+  }
+
+  home() {
+    this.navCtrl.setRoot('CategoriasPage');
+  }
+
+  private getIdPedido(location: string): string {
+    let parts = location.split('/');
+    return parts[parts.length - 1];
   }
 
 }
