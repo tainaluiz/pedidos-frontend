@@ -10,6 +10,10 @@ export class ClienteService {
     constructor(public http: HttpClient) {
     }
 
+    findById(id: string): Observable<any> {
+        return this.http.get<any>(`${API_CONFIG.baseUrl}/clientes/${id}`);
+    }
+
     findByEmail(email: string): Observable<any> {
         return this.http.get<any>(`${API_CONFIG.baseUrl}/clientes/email?value=${email}`);
     }
