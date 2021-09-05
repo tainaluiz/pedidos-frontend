@@ -10,7 +10,8 @@ import { ProdutoDTO } from './../../models/produto.dto';
 })
 export class ProdutosPage {
 
-  items: ProdutoDTO[];
+  items: ProdutoDTO[] = [];
+  page: number = 0;
 
   constructor(
     public navCtrl: NavController,
@@ -25,18 +26,20 @@ export class ProdutosPage {
 
   findByCategoria() {
     let loader = this.presentLoading();
-    this.produtoService.findByCategoria(this.navParams.get('categoria_id'))
+    this.produtoService.findByCategoria(
+      this.navParams.get('categoria_id'), this.page, 10)
       .subscribe(response => {
-        this.items = response['content'];
+        this.page++;
+        this.loadImageUrls(response['content']);
+        this.items = this.items.concat(response['content']);
         loader.dismiss();
-        this.loadImageUrls();
       }, () => {
         loader.dismiss();
       })
   }
 
-  loadImageUrls() {
-    for (let item of this.items) {
+  loadImageUrls(items: ProdutoDTO[]) {
+    for (let item of items) {
       this.produtoService.getSmallImageFromBucket(item.id)
         .subscribe(() => {
           item.imageUrl = this.produtoService.getFormattedUrlSmallImageFromBucket(item.id);
@@ -58,9 +61,18 @@ export class ProdutosPage {
   }
 
   doRefresh(refresher) {
+    this.page = 0;
+    this.items = [];
     this.findByCategoria();
     setTimeout(() => {
       refresher.complete();
+    }, 100);
+  }
+
+  doInfinite(infiniteScroll) {
+    this.findByCategoria();
+    setTimeout(() => {
+      infiniteScroll.complete();
     }, 100);
   }
 
