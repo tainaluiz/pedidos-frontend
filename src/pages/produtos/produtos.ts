@@ -57,4 +57,11 @@ export class ProdutosPage {
     return loader;
   }
 
+  doRefresh(refresher) {
+    this.findByCategoria();
+    setTimeout(() => {
+      refresher.complete();
+    }, 100);
+  }
+
 }
