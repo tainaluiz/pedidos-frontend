@@ -64,7 +64,7 @@ export class ProfilePage {
       }, () => { });
   }
 
-  getCameraPicture() {
+  getPicture() {
     this.cameraOn = true;
     this.camera.getPicture(this.camOptions).then((imageData) => {
       this.cameraOn = false;
@@ -73,6 +73,16 @@ export class ProfilePage {
       console.log(err);
       this.cameraOn = false
     });
+  }
+
+  getCameraPicture() {
+    this.camOptions.sourceType = this.camera.PictureSourceType.CAMERA;
+    this.getPicture();
+  }
+
+  getGalleryPicture() {
+    this.camOptions.sourceType = this.camera.PictureSourceType.PHOTOLIBRARY;
+    this.getPicture();
   }
 
   sendPicture() {
