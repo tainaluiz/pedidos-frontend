@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { DomSanitizer } from '@angular/platform-browser';
 import { Camera, CameraOptions } from '@ionic-native/camera';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { ClienteDTO } from './../../models/cliente.dto';
@@ -15,6 +16,7 @@ export class ProfilePage {
   cliente: ClienteDTO;
   picture: string;
   cameraOn: boolean;
+  profileImage: any;
 
   camOptions: CameraOptions = {
     quality: 100,
@@ -28,7 +30,9 @@ export class ProfilePage {
     public navParams: NavParams,
     public storageService: StorageService,
     public clienteService: ClienteService,
-    public camera: Camera) {
+    public camera: Camera,
+    public sanitizer: DomSanitizer) {
+    this.profileImage = 'assets/imgs/avatar-blank.png';
   }
 
   ionViewDidLoad() {
@@ -59,9 +63,23 @@ export class ProfilePage {
 
   getImageIfExists() {
     this.clienteService.getImageFromBucket(this.cliente.id)
-      .subscribe(() => {
+      .subscribe((response) => {
         this.cliente.imageUrl = this.clienteService.getFormattedUrlImageFromBucket(this.cliente.id);
-      }, () => { });
+        this.blobToDataURL(response).then((dataUrl: string) => {
+          this.profileImage = this.sanitizer.bypassSecurityTrustUrl(dataUrl);
+        });
+      }, () => {
+        this.profileImage = 'assets/imgs/avatar-blank.png';
+      });
+  }
+
+  blobToDataURL(blob: any) {
+    return new Promise((fullfill, reject) => {
+      const reader = new FileReader();
+      reader.onerror = reject;
+      reader.onload = () => fullfill(reader.result);
+      reader.readAsDataURL(blob);
+    });
   }
 
   getPicture() {
@@ -89,7 +107,7 @@ export class ProfilePage {
     this.clienteService.uploadPicture(this.picture)
       .subscribe(() => {
         this.picture = null;
-        this.loadData();
+        this.getImageIfExists();
       }, () => { })
   }
 
